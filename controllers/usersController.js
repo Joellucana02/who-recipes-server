@@ -1,5 +1,6 @@
-//importing modules
+//importing modules-->
 const express = require("express");
+//user handlers
 exports.getAllUsers = async (req, res) => {
   try {
     res.status(400).json({
