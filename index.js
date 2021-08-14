@@ -3,13 +3,19 @@ const app = require("./app");
 const dotenv = require("dotenv");
 
 dotenv.config({ path: "./config.env" });
+const DB = process.env.DATABASE.replace(
+  "<password>",
+  proccess.env.DATABASE_PASSWORD
+);
 //running mongoDB-->
 mongoose
-  .connect("mongodb://localhost:27017/test", {
+  .connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   })
-  .then((con) => {
+  .then((success) => {
     console.log("successfully connected to mongoDB");
   });
 //running server-->>
