@@ -9,7 +9,7 @@ const { signupUser, loginUser } = authController;
 //routing requests-->
 /* ------------ */
 //adding user and login-->
-router.route("/signup").get(signupUser);
-router.route("/login").get(loginUser);
+router.route("/signup").post(signupUser);
+router.route("/login").post(loginUser);
 
 module.exports = router;
