@@ -59,6 +59,13 @@ userSchema.pre("save", async function (next) {
 });
 
 /* ----------------- */
+//methods for controllers-->
+/* ----------------- */
+userSchema.methods.comparePassword = function (inputPassword, realPassword) {
+  //return a boolean value with bcrypt
+  return await bcrypt.compare(inputPassword, realPassword);
+};
+/* ----------------- */
 //creating user model-->
 const User = mongoose.model("User", userSchema);
 

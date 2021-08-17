@@ -4,11 +4,12 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 
 //destructuring controllers-->
-const { signupUser } = authController;
+const { signupUser, loginUser } = authController;
 
 //routing requests-->
 /* ------------ */
 //adding user and login-->
 router.route("/signup").get(signupUser);
+router.route("/login").get(loginUser);
 
 module.exports = router;
