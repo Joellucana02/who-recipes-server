@@ -4,15 +4,49 @@ const mongoose = require("mongoose");
 
 //defining post schema -->
 const postSchema = new mongoose.Schema({
-  title: String, // String is shorthand for {type: String}
-  pic: String,
-  desc: String,
-  tags: Array,
-  hidden: Boolean,
-  meta: {
-    votes: Number,
-    favs: Number,
+  userId: {
+    type: String,
+    required: true,
+  }, // String is shorthand for {type: String}
+  desc: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 150,
   },
+  pic: String,
+  title: {
+    type: String,
+    required: true,
+    minlength: 8,
+    select: false,
+  },
+  tags: { type: Array },
+  ingredients: {
+    type: Array,
+    //required: true,
+  },
+  steps: {
+    type: Array,
+    //required: true,
+  },
+  hidden: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
+  difficulty: {
+    type: String,
+    default: "easy",
+    num: ["easy", "medium", "hard"],
+  },
+  dishes: {
+    type: String,
+    default: "1",
+  },
+  cockingTime: { type: String, default: "30min" },
+  votes: Array,
+  favs: Array,
   comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
 });
