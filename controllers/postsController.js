@@ -29,7 +29,7 @@ exports.createPost = async (req, res) => {
   try {
     const post = await Post.create({
       title: req.body.title,
-      desc: req.body.title,
+      desc: req.body.desc,
       userId: req.body.userId ? req.body.userId : undefined,
     });
     res.status(200).json({ msg: "success", data: { post } });
