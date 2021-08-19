@@ -2,7 +2,16 @@
 const User = require("./../models/usersModel");
 const mongoose = require("mongoose");
 const express = require("express");
+const jwt = require("jsonwebtoken"); //info: https://github.com/auth0/node-jsonwebtoken
 //auth handlers
+/* var jwt = require("jsonwebtoken");
+var token = jwt.sign({ foo: "bar" }, "shhhhh"); */
+let signToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
 exports.signupUser = async (req, res) => {
   try {
     const newUser = await User.create({
@@ -11,8 +20,10 @@ exports.signupUser = async (req, res) => {
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
     });
-    res.status(200).json({
+    const token = signToken(newUser._id);
+    res.status(201).json({
       msg: "success",
+      jtw: token,
       data: newUser,
     });
   } catch (error) {
@@ -33,8 +44,10 @@ exports.loginUser = async (req, res) => {
     if (!user || !(await user.comparePassword(password, user.password))) {
       res.status(400).json({ msg: "no user found" });
     }
+    const token = signToken(user._id);
     res.status(200).json({
       msg: "success",
+      jwt: token,
       data: user,
     });
   } catch (error) {
