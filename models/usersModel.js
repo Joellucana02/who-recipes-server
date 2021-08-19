@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema({
   },
   comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
+  passwordChangedAt: Date,
 });
 //adding middlewares--> ||"schema.prototype.pre" more info: https://mongoosejs.com/docs/api.html#schema_Schema-pre
 /* ----------------- */
@@ -57,7 +58,11 @@ userSchema.pre("save", async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
-
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+  this.passwordChangedAt = Date.now() - 3000;
+  next();
+});
 /* ----------------- */
 //methods for controllers-->
 /* ----------------- */
@@ -67,6 +72,20 @@ userSchema.methods.comparePassword = async function (
 ) {
   //return a boolean value with bcrypt
   return await bcrypt.compare(inputPassword, realPassword);
+};
+
+userSchema.methods.changePasswordAfter = function (JWTTimeStap) {
+  if (this.passwordChangedAt) {
+    //check if password was changed after token
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    console.log(changedTimestamp, passwordChangedAt);
+    return JWTTimestamp < changedTimestamp;
+  }
+  //otherwise token is valid
+  return false;
 };
 /* ----------------- */
 //creating user model-->

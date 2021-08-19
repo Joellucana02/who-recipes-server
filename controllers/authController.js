@@ -3,6 +3,7 @@ const User = require("./../models/usersModel");
 const mongoose = require("mongoose");
 const express = require("express");
 const jwt = require("jsonwebtoken"); //info: https://github.com/auth0/node-jsonwebtoken
+const promisify = require("util.promisify"); //info: https://www.npmjs.com/package/util.promisify
 //auth handlers
 /* var jwt = require("jsonwebtoken");
 var token = jwt.sign({ foo: "bar" }, "shhhhh"); */
@@ -23,8 +24,8 @@ exports.signupUser = async (req, res) => {
     const token = signToken(newUser._id);
     res.status(201).json({
       msg: "success",
-      jtw: token,
-      data: newUser,
+      jwt: token,
+      data: { newUser },
     });
   } catch (error) {
     res.status(400).json({ msg: "Cannot create an user", error });
@@ -52,5 +53,30 @@ exports.loginUser = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ msg: "Cannot create an user", error });
+  }
+};
+exports.protectRoute = async (req, res, next) => {
+  try {
+    let token;
+    //get token
+    if (req.headers.authorization.startsWith("Bearer")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+    console.log(token);
+    const tokenDecoded = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET
+    );
+    console.log(tokenDecoded);
+    const currentUser = await User.findById(tokenDecoded.id);
+    if (!currentUser) res.json({ error: "this user does not exist" });
+    //check if user changed his password, if so, this token is not valid
+    if (currentUser.changePasswordAfter(tokenDecoded.iat)) {
+      res.status(400).json({ msg: "invalid token", error });
+    }
+    req.user = currentUser;
+    next();
+  } catch (error) {
+    res.status(400).json({ msg: "Cannot access protect route", error });
   }
 };
