@@ -9,19 +9,24 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    minlength: 4,
+    maxlength: 30,
   }, // String is shorthand for {type: String}
   email: {
     type: String,
     required: true,
     unique: true,
     lowercase: true,
+    minlength: 6,
+    maxlength: 50,
     validate: [validator.isEmail],
   },
   profilePic: String,
   password: {
     type: String,
     required: true,
-    minlength: 8,
+    minlength: 6,
+    maxlength: 50,
     select: false,
   },
   passwordConfirm: {
@@ -36,14 +41,10 @@ const userSchema = new mongoose.Schema({
   },
   hidden: {
     type: Boolean,
-    default: true,
+    default: false,
     select: false,
   },
-  meta: {
-    votes: Number,
-    favs: Number,
-  },
-  comments: [{ body: String, date: Date }],
+  connections: [String],
   date: { type: Date, default: Date.now },
   passwordChangedAt: Date,
 });

@@ -62,12 +62,12 @@ exports.protectRoute = async (req, res, next) => {
     if (req.headers.authorization.startsWith("Bearer")) {
       token = req.headers.authorization.split(" ")[1];
     }
-    console.log(token);
+    //console.log(token);
     const tokenDecoded = await promisify(jwt.verify)(
       token,
       process.env.JWT_SECRET
     );
-    console.log(tokenDecoded);
+    // console.log(tokenDecoded);
     const currentUser = await User.findById(tokenDecoded.id);
     if (!currentUser) res.json({ error: "this user does not exist" });
     //check if user changed his password, if so, this token is not valid
