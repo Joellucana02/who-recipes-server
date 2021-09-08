@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema({
     maxlength: 300,
   },
   pic: String,
-  tags: { type: Array },
+  tags: [String],
   hidden: {
     type: Boolean,
     default: true,

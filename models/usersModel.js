@@ -44,7 +44,8 @@ const userSchema = new mongoose.Schema({
     default: false,
     select: false,
   },
-  connections: [String],
+  followers: [String],
+  followings: [String],
   date: { type: Date, default: Date.now },
   passwordChangedAt: Date,
 });
