@@ -1,6 +1,7 @@
 //importing modules-->
 const express = require("express");
 const User = require("../models/usersModel");
+const Post = require("./../models/postsModel");
 //user handlers
 exports.getAllUsers = async (req, res) => {
   try {
@@ -62,5 +63,16 @@ exports.unfollowUser = async (req, res) => {
     }
   } else {
     res.status(400).json({ msg: "Cannot unfollow yourself", error });
+  }
+};
+exports.userTimeline = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const posts = await Post.find({ userId: user._id });
+    res
+      .status(200)
+      .json({ msg: "success, timeline", length: posts.length, data: posts });
+  } catch (error) {
+    res.status(400).json({ msg: "Cannot get this user timeline", error });
   }
 };
