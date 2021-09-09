@@ -30,9 +30,10 @@ exports.followUser = async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       const currentUser = await User.findById(req.body.userId);
-      if (!user.connections.includes(currentUser._id)) {
+      if (!user.followers.includes(currentUser._id)) {
         await user.updateOne({ $push: { followers: currentUser._id } });
         await currentUser.updateOne({ $push: { followings: user._id } });
+        res.status(200).json({ msg: "success", user });
       } else {
         res.status(400).json({ msg: "already follow this user", error });
       }
@@ -49,9 +50,10 @@ exports.unfollowUser = async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       const currentUser = await User.findById(req.body.userId);
-      if (user.connections.includes(currentUser._id)) {
+      if (user.followers.includes(currentUser._id)) {
         await user.updateOne({ $pull: { followers: currentUser._id } });
         await currentUser.updateOne({ $pull: { followings: user._id } });
+        res.status(200).json({ msg: "success", user });
       } else {
         res.status(400).json({ msg: "already unfollow this user", error });
       }
