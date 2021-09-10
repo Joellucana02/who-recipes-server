@@ -22,10 +22,11 @@ exports.signupUser = async (req, res) => {
       passwordConfirm: req.body.passwordConfirm,
     });
     const token = signToken(newUser._id);
+    res.cookie(`Cookie token name`, token);
     res.status(201).json({
       msg: "success",
-      jwt: token,
-      data: { newUser },
+      jwt: "Cookie have been saved successfully",
+      data: newUser,
     });
   } catch (error) {
     res.status(400).json({ msg: "Cannot create an user", error });
@@ -46,9 +47,10 @@ exports.loginUser = async (req, res) => {
       res.status(400).json({ msg: "no user found" });
     }
     const token = signToken(user._id);
+    res.cookie(`Cookie token name`, token);
     res.status(200).json({
       msg: "success",
-      jwt: token,
+      jwt: "Cookie have been saved successfully",
       data: user,
     });
   } catch (error) {
