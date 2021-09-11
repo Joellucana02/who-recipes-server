@@ -10,7 +10,7 @@ const { getAllPosts, getPostbyId, createPost, votePost, addComment } =
 const { protectRoute } = authController;
 
 //routing requests
-router.route("/").get(protectRoute, getAllPosts);
+router.route("/").get(getAllPosts);
 router.route("/").post(protectRoute, createPost);
 router.route("/:id").get(getPostbyId);
 router.route("/:id/vote").put(protectRoute, votePost);

@@ -25,7 +25,7 @@ exports.signupUser = async (req, res) => {
     res.cookie(`Cookie token name`, token, {
       maxAge: 5000,
       // expires works the same as the maxAge
-      expires: new Date("01 12 2021"),
+      expires: new Date("01 01 2022"),
       secure: false,
       httpOnly: true,
       sameSite: "lax",

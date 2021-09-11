@@ -2,10 +2,17 @@
 const express = require("express");
 const Post = require("../models/postsModel");
 const User = require("../models/usersModel");
+const APIFeatures = require("../utils/ApiFeatures");
 //user handlers
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const features = new APIFeatures(Post.find({}), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const posts = await features.query;
     res.status(200).json({
       msg: "success",
       length: posts.length,
