@@ -22,10 +22,17 @@ exports.signupUser = async (req, res) => {
       passwordConfirm: req.body.passwordConfirm,
     });
     const token = signToken(newUser._id);
-    res.cookie(`Cookie token name`, token);
+    res.cookie(`Cookie token name`, token, {
+      maxAge: 5000,
+      // expires works the same as the maxAge
+      expires: new Date("01 12 2021"),
+      secure: false,
+      httpOnly: true,
+      sameSite: "lax",
+    });
     res.status(201).json({
       msg: "success",
-      jwt: "Cookie have been saved successfully",
+      jwt: token,
       data: newUser,
     });
   } catch (error) {
@@ -50,7 +57,7 @@ exports.loginUser = async (req, res) => {
     res.cookie(`Cookie token name`, token);
     res.status(200).json({
       msg: "success",
-      jwt: "Cookie have been saved successfully",
+      jwt: token,
       data: user,
     });
   } catch (error) {
