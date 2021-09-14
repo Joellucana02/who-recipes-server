@@ -67,7 +67,13 @@ exports.addComment = async (req, res) => {
     if (post && user) {
       await post.updateOne({
         $push: {
-          comments: [{ body: req.body.comments.body, date: Date.now() }],
+          comments: [
+            {
+              body: req.body.comments.body,
+              date: Date.now(),
+              userId: req.body.userId,
+            },
+          ],
         },
       });
       res.status(200).json({ msg: "success", data: post });
