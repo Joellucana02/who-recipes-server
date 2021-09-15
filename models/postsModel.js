@@ -22,7 +22,9 @@ const postSchema = new mongoose.Schema({
     select: false,
   },
   votes: [String],
-  comments: [{ body: String, date: Date, userId: String }],
+  comments: [
+    { body: { type: String, maxlength: 300 }, date: Date, userId: String },
+  ],
   date: { type: Date, default: Date.now },
 });
 //creating post model-->
