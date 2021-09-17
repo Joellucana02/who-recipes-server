@@ -23,7 +23,11 @@ const postSchema = new mongoose.Schema({
   },
   votes: [String],
   comments: [
-    { body: { type: String, maxlength: 300 }, date: Date, userId: String },
+    {
+      body: { type: String, maxlength: 300, minlength: 1 },
+      date: Date,
+      userId: String,
+    },
   ],
   date: { type: Date, default: Date.now },
 });
