@@ -8,9 +8,13 @@ const authRouter = require("./routes/authRouter");
 const postsRouter = require("./routes/postsRouter");
 //middlewares-->
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
+app.use(cors());
 //routing pages-->
+app.get("/set-cookie", (req, res) => {
+  res.cookie("mySuperCookie", false);
+  res.status(200).json({ hi: "u got the cookies" });
+});
 app.use("/api/v1", authRouter);
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/users", usersRouter);

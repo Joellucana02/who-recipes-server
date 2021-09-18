@@ -49,11 +49,11 @@ exports.votePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     const user = await User.findById(req.body.userId);
-    if (!post.votes.includes(user.userId)) {
-      await post.updateOne({ $push: { votes: user.userId } });
+    if (!post.votes.includes(user._id)) {
+      await post.updateOne({ $push: { votes: user._id } });
       res.status(200).json({ msg: "success", data: post });
     } else {
-      await post.updateOne({ $pull: { votes: user.userId } });
+      await post.updateOne({ $pull: { votes: user._id } });
       res.status(200).json({ msg: "success", data: post });
     }
   } catch (error) {

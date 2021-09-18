@@ -22,7 +22,7 @@ exports.signupUser = async (req, res) => {
       passwordConfirm: req.body.passwordConfirm,
     });
     const token = signToken(newUser._id);
-    res.cookie(`Cookie token name`, token, {
+    res.cookie(`jwt`, token, {
       maxAge: 5000,
       // expires works the same as the maxAge
       expires: new Date("01 01 2022"),
@@ -54,7 +54,14 @@ exports.loginUser = async (req, res) => {
       res.status(400).json({ msg: "no user found" });
     }
     const token = signToken(user._id);
-    res.cookie(`Cookie token name`, token);
+    res.cookie(`jwt`, token, {
+      maxAge: 15 * 60 * 60 * 24 * 1000,
+      // expires works the same as the maxAge
+      expires: new Date("01 01 2022"),
+      secure: false,
+      httpOnly: true,
+      /* sameSite: "lax", */
+    });
     res.status(200).json({
       msg: "success",
       jwt: token,
@@ -67,12 +74,15 @@ exports.loginUser = async (req, res) => {
 exports.protectRoute = async (req, res, next) => {
   try {
     let token;
+    /* const token = await req.cookies;
+    console.log(token); */
     //get token
     if (req.headers.authorization.startsWith("Bearer")) {
       token = req.headers.authorization.split(" ")[1];
     }
     //console.log(token);
     const tokenDecoded = await promisify(jwt.verify)(
+      /* token.jwt, */
       token,
       process.env.JWT_SECRET
     );
