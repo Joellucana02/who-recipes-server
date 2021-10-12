@@ -62,18 +62,17 @@ exports.userTimeline = async (req, res) => {
   }
 };
 exports.searchUser = async (req, res) => {
-  console.log("hello world");
   try {
-    const param1 = req.query.param1;
+    console.log("world");
+    const param1 = req.query.search;
     console.log(param1);
-    const result = await User.find({ $text: { $search: req.query.param1 } });
-    /* .skip(20)
-       .limit(10) */
-    /* .exec(function(err, docs) { ... }); */
+
+    const result = await User.find({ username: param1 });
+
     res
       .status(200)
-      .json({ msg: "success", length: posts.length, data: result });
+      .json({ msg: "success", length: result.length, data: result });
   } catch (error) {
-    res.status(400).json({ msg: "Cannot find this user", error });
+    res.status(400).json({ msg: "Cannot find this user ...", error });
   }
 };

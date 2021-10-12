@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   passwordChangedAt: Date,
 });
-userSchema.index({ username: "text", "profile.something": "text" });
+
 //adding middlewares--> ||"schema.prototype.pre" more info: https://mongoosejs.com/docs/api.html#schema_Schema-pre
 /* ----------------- */
 userSchema.pre("save", async function (next) {

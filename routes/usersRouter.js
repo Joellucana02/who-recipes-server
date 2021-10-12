@@ -9,7 +9,7 @@ const { getAllUsers, getUserbyId, followUser, userTimeline, searchUser } =
 const { protectRoute } = authController;
 //routing requests
 router.route("/").get(getAllUsers);
-router.route("/search").get(searchUser);
+router.route("/param").get(searchUser);
 router.route("/:id").get(getUserbyId);
 router.route("/:id/follow").put(protectRoute, followUser);
 router.route("/:id/timeline").get(userTimeline);
